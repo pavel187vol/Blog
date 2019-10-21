@@ -6,8 +6,15 @@
   </head>
   <body>
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
+    {% if post.published_date %}
+    <p>{{post.published_date}}</p>
+    {% else %}
+    <a href="{% url 'post_publish' pk=post.pk%}">Publish</a>
+    {% endif %}
+    <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
     <h1>{{post.title}}</h1>
     <p>{{post.text}}</p>
     <i>{{post.authon}}</i>
+
   </body>
 </html>

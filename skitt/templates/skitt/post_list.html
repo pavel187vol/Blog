@@ -6,6 +6,8 @@
   </head>
   <body>
     <a href="{% url 'post_new' %}">New</a>
+    <hr>
+    <a href="{% url 'post_drafts_list'%}">Drafts</a>
     <div>
       <h1><a href="/">Django Girls Blog</a></h1>
     </div>
@@ -13,7 +15,7 @@
     {% for post in posts %}
     <div>
         <p>published: {{ post.published_date }}</p>
-        <h1><a href="{% url 'post_detail' pk=post.pk%}">{{ post.title }}</a></h1>
+        <h1><a href="{% url 'post_details' pk=post.pk%}">{{ post.title }}</a></h1>
         <p>{{ post.text|linebreaksbr }}</p>
     </div>
 {% endfor %}

@@ -1,0 +1,9 @@
+{% for post in posts %}
+  <div>
+      <h1><a href="{% url 'post_details' pk=post.pk%}">{{ post.title }}</a></h1>
+      <p>{{ post.text|linebreaksbr }}</p>
+      <p>drafts: {{ post.created_date }}</p>
+      <i>{{post.authon}}</i>
+      <hr>
+  </div>
+{% endfor %}
