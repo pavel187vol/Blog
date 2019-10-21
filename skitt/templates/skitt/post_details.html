@@ -17,6 +17,11 @@
     <p>{{post.text}}</p>
     <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
     <i>{{post.authon}}</i>
+    <hr>
+    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+    {% for comment in post.comment.all %}
+      <p>{{comment.text}}</p>
+    {% endfor%}
 
   </body>
 </html>
