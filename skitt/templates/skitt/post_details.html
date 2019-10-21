@@ -20,7 +20,15 @@
     <hr>
     <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
     {% for comment in post.comment.all %}
-      <p>{{comment.text}}</p>
+      {% if user.is_authenticated or comment.approved_comment%}
+        {% if not comment.approved_comment %}
+          <a href="{% url 'comment_remove' pk=comment.pk%}">Remove</a>
+          <a href="{% url 'comment_approve' pk=comment.pk%}">Approve</a>
+        {% endif %}
+        <p>{{comment.text}}</p>
+      {%endif%}
+    {% empty %}
+      <p>No comments here yer!</p>
     {% endfor%}
 
   </body>
