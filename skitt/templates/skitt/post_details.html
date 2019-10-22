@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles%}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -6,6 +7,27 @@
     <title></title>
   </head>
   <body>
+    {% block javascript %}
+    <script>
+    $(".form-comment").change(function () {
+      var text = $(this).val();
+
+      $.ajax({
+        url: '/ajax/validate_text/',
+        data: {
+          'text': text
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert("A user with this text already exists.");
+          }
+        }
+      });
+
+    });
+    </script>
+    {% endblock %}
     {% block content %}
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
     {% if post.published_date %}
@@ -15,11 +37,9 @@
     {% endif %}
     <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
     <h1>{{post.title}}</h1>
-    <p>{{post.text}}</p>
+    <p class="her">{{post.text}}</p>
     <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
-    <i>{{post.authon}}</i>
     <hr>
-    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
     {% for comment in post.comment.all %}
       {% if user.is_authenticated or comment.approved_comment%}
         {% if not comment.approved_comment %}
@@ -31,7 +51,9 @@
     {% empty %}
       <p>No comments here yer!</p>
     {% endfor%}
-
+    <form class="form-comment" method="POST">{%csrf_token%}
+      {{form.as_p}}
+      <button type="submit" name="button">Done</button>
+    </form>
     {% endblock %}
-  </body>
 </html>

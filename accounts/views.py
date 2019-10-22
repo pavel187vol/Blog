@@ -37,3 +37,8 @@ def edit_profile(request):
 def view_profile(request):
     profiles = UserProfile.objects.all()
     return render(request, 'accounts/view_profile.html', {'profiles': profiles})
+
+def details_profile(request, pk):
+    user = request.user
+    profile = get_object_or_404(UserProfile, pk=pk)
+    return render(request, 'accounts/details_profile.html', {'profile': profile, 'user': user})

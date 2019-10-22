@@ -6,7 +6,8 @@
 
 {% block content %}
 {% for profile in profiles %}
-  {{profile.user.username}}
+  <a href="{% url 'details_profile' pk=profile.pk%}">{{profile.user.username}}</a>
+  <hr>
 {% endfor %}
 <a href="{% url 'edit_profile'%}">Edit Profile</a>
 
