@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -6,6 +6,7 @@
     <title></title>
   </head>
   <body>
+    {% block content %}
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
     {% if post.published_date %}
     <p>{{post.published_date}}</p>
@@ -31,5 +32,6 @@
       <p>No comments here yer!</p>
     {% endfor%}
 
+    {% endblock %}
   </body>
 </html>

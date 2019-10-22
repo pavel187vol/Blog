@@ -18,14 +18,16 @@
                 <a class="navbar-brand" href="#"><strong>Oodles</strong></a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="{% url 'home:home' %}">Home</a></li>
-                <li><a href="{% url 'accounts:view_profile'%}">Profile</a></li>
-                <li><a href="{% url 'blog:blog' %}">Blog</a></li>
+                <li><a href="{% url 'post_list' %}">Home</a></li>
+                <li><a href="{% url 'view_profile'%}">Profile</a></li>
+                <li><a href="{% url 'post_list' %}">Blog</a></li>
+                <li><a href="{% url 'post_new' %}">New</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'accounts:view_profile'%}"><span class="glyphicon glyphicon-user"></span>Hello {{ user }} !!</a></li>
+                <li><a href="{% url 'view_profile'%}"><span class="glyphicon glyphicon-user"></span>Hello {{ user }} !!</a></li>
                 <li><img src="{{ user.userprofile.image.url}}" width="50" height="50"></li>
-                <li><a href="{% url 'accounts:logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
             </ul>
         </div>
     </nav>
@@ -36,20 +38,19 @@
                 <a class="navbar-brand" href="#"><strong>Oodless</strong></a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{%url 'home:home'%}">Home</a></li>
-                <li><a href="#">Profile</a></li>
+                <li class="active"><a href="{%url 'post_list'%}">Home</a></li>
                 <li><a href="#">Contact</a></li>
+                <li><a href="{% url 'post_new'% }"></a>New</li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'accounts:register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                <li><a href="{% url 'accounts:login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
         </div>
     </nav>
     </nav>
     </div>
     {% endif %}
-    {% block body %}
+    {% block content %}
     <h1>Base</h1>
     {% endblock %}
 </body>

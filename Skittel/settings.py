@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'skitt',
-    'accounts',
+    'accounts.apps.AccountsConfig', 
 ]
 
 MIDDLEWARE = [
@@ -129,3 +129,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_PROFILE_MODULE = "accounts.UserProfile"
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

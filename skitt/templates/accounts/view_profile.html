@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Profile</title>
+{% endblock %}
+
+{% block content %}
+{% for profile in profiles %}
+  {{profile.user.username}}
+{% endfor %}
+<a href="{% url 'edit_profile'%}">Edit Profile</a>
+
+{% endblock %}

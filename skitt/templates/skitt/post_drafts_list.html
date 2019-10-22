@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 {% for post in posts %}
   <div>
       <h1><a href="{% url 'post_details' pk=post.pk%}">{{ post.title }}</a></h1>
@@ -7,3 +9,4 @@
       <hr>
   </div>
 {% endfor %}
+{% endblock %} 
