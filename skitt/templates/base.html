@@ -21,13 +21,12 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'post_list' %}">Home</a></li>
-                <li><a href="{% url 'view_profile'%}">Profile</a></li>
-                <li><a href="{% url 'post_list' %}">Blog</a></li>
                 <li><a href="{% url 'post_new' %}">New</a></li>
+                <li><a href="{% url 'post_list' %}">Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'view_profile'%}"><span class="glyphicon glyphicon-user"></span>Hello {{ user }} !!</a></li>
-                <li><img src="{{ user.userprofile.image.url}}" width="50" height="50"></li>
+                <a href="{% url 'view_profile' %}"><p>{{user.username}}{{user.user_profile.pk}}</p></a>
+                <li><img src="{{ user.user_profile.image.url}}" width="50" height="50"></li>
                 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 
             </ul>
@@ -42,7 +41,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{%url 'post_list'%}">Home</a></li>
                 <li><a href="#">Contact</a></li>
-                <li><a href="{% url 'post_new'% }"></a>New</li>
+                <li><a href="{%url 'post_new'%}">New</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -53,11 +52,7 @@
     </div>
     {% endif %}
     {% block content %}
-    <h1>Base</h1>
     {% endblock %}
 
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    {% block javascript %}{% endblock %}
 </body>
 </html>

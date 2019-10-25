@@ -1,9 +1,14 @@
-from django.conf.urls import *
-from . import views
+from django.conf.urls import url
 from django.urls import path
-urlpatterns = [
-            url(r'^view_profile/$', views.view_profile, name ='view_profile'),
-            url(r'^view_profile/edit_profile/$', views.edit_profile, name ='edit_profile'),
-            path('account/<int:pk>/details/', views.details_profile, name ='details_profile'),
-            path('signup/', views.SignUp.as_view(), name='signup'),
+from . import views
+# SET THE NAMESPACE!
+add_name = 'Skittel'
+# Be careful setting the name to just /login use userlogin instead!
+urlpatterns=[
+    url(r'^register/$',views.register,name='register'),
+    url(r'^user_login/$',views.user_login,name='user_login'),
+    url(r'^view_profile/$', views.view_profile, name ='view_profile'),
+    path('details/<int:pk>/', views.details_profile, name ='details_profile'),
+    url(r'^view_profile/edit_profile/<int:pk>/$', views.edit_profile, name ='edit_profile'),
+
 ]

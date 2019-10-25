@@ -5,7 +5,10 @@
 {% endblock %}
 {% block content %}
 {{profile.user.username}}
+{% for post in profile.user.posts.all%}
+{{post.title}}
+{% endfor%}
+<a href="{% url 'details_profile' pk=profile.pk %}"></a>
 <br>
-<img src="{{profile.image.url}}" alt="Ava" width="100", height="100">
 <p>{{profile.city}}</p>
 {% endblock %}

@@ -1,38 +1,97 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from datetime import datetime
-from accounts.forms import (EditProfileForm, ProfileForm)
-from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import render,get_object_or_404
+from .forms import UserForm,UserProfileInfoForm
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
-from django.views import generic
-from .models import UserProfile, User
+from .models import UserProfile
+
+@login_required
+def special(request):
+    return HttpResponse("You are logged in !")
 
 
-class SignUp(generic.CreateView):
-    form_class = ProfileForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('post_list'))
+
+
+def register(request):
+    registered = False
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileInfoForm(data=request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            if 'image' in request.FILES:
+                print('found it')
+                profile.image = request.FILES['image']
+            profile.save()
+            registered = True
+        else:
+            print(user_form.errors,profile_form.errors)
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileInfoForm()
+    return render(request,'registration/registration.html',
+                          {'user_form':user_form,
+                           'profile_form':profile_form,
+                           'registered':registered})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('post_list'))
+            else:
+                return HttpResponse("Your account was inactive.")
+        else:
+            print("Someone tried to login and failed.")
+            print("They used username: {} and password: {}".format(username,password))
+            return HttpResponse("Invalid login details given")
+    else:
+        return render(request, 'registration/login.html', {})
+
 
 @login_required
 def edit_profile(request):
+    user_profile = get_object_or_404(UserProfile)
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)  # request.FILES is show the selected image or file
+        form = UserProfileInfoForm(request.POST, instance=request.user)
 
-        if form.is_valid() and profile_form.is_valid():
-            user_form = form.save()
-            custom_form = profile_form.save(False)
-            custom_form.user = user_form
-            custom_form.save()
+        if form.is_valid():
+            user_profile = form.save()
+            user_profile.save()
             return redirect('accounts:view_profile')
     else:
-        form = EditProfileForm(instance=request.user)
-        profile_form = ProfileForm()
+        form = UserProfileInfoForm(instance=user_profile)
         args = {}
         # args.update(csrf(request))
         args['form'] = form
-        args['profile_form'] = profile_form
         return render(request, 'accounts/edit_profile.html', args)
+
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.authon = request.user
+            post.save()
+            return redirect('post_details', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'skitt/post_new.html', {'form': form})
 
 def view_profile(request):
     profiles = UserProfile.objects.all()

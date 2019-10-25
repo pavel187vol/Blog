@@ -7,38 +7,22 @@
     <title></title>
   </head>
   <body>
-    {% block javascript %}
-    <script>
-    $(".form-comment").change(function () {
-      var text = $(this).val();
 
-      $.ajax({
-        url: '/ajax/validate_text/',
-        data: {
-          'text': text
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.is_taken) {
-            alert("A user with this text already exists.");
-          }
-        }
-      });
-
-    });
-    </script>
-    {% endblock %}
     {% block content %}
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
-    {% if post.published_date %}
-    <p>{{post.published_date}}</p>
-    {% else %}
-    <a href="{% url 'post_publish' pk=post.pk%}">Publish</a>
-    {% endif %}
     <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
+    {% if post.published_date %}
+    <div class="date">
+      {{ post.published_date }}
+      {% else %}
+      <a href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+    </div>
+    {% endif %}
     <h1>{{post.title}}</h1>
     <p class="her">{{post.text}}</p>
+    {% if post.cover %}
     <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
+    {% endif%}
     <hr>
     {% for comment in post.comment.all %}
       {% if user.is_authenticated or comment.approved_comment%}
@@ -51,9 +35,13 @@
     {% empty %}
       <p>No comments here yer!</p>
     {% endfor%}
+    {% if user.is_authenticated %}
     <form class="form-comment" method="POST">{%csrf_token%}
       {{form.as_p}}
       <button type="submit" name="button">Done</button>
     </form>
+    {% else %}
+    <a href="{% url 'login'%}">Login</a>
+    {% endif %}
     {% endblock %}
 </html>

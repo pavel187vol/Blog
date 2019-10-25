@@ -4,6 +4,9 @@ from django.utils import timezone
 from .forms import PostForm, CommentForm
 from accounts.models import UserProfile
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponse
+
 
 def validate_text(request):
     text = request.GET.get('text', None)
@@ -13,15 +16,13 @@ def validate_text(request):
     return JsonResponse(data)
 # Create your views here.
 def post_list(request):
-    # posts = Post.objects.filter(moderatin=True)
     posts = Post.objects.filter(published_date__isnull=False).order_by('created_date')
     return render(request, 'skitt/post_list.html', {'posts': posts})
 
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
-    post.save()
-    return redirect('post_details', pk=pk)
+    return redirect('post_detail', pk=pk)
 
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -29,7 +30,6 @@ def post_remove(request, pk):
     return redirect('post_list')
 
 def post_drafts_list(request):
-    # posts = Post.objects.filter(moderatin=False)
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'skitt/post_drafts_list.html',{'posts': posts})
 
@@ -48,6 +48,7 @@ def post_details(request, pk):
         form = CommentForm()
     return render(request, 'skitt/post_details.html',{'post': post,'form': form})
 
+@login_required
 def post_new(request):
     if request.method == 'POST':
         form = PostForm(request.POST)

@@ -8,8 +8,7 @@ class UserProfileManager(models.Manager):
          pass
 
 class UserProfile(models.Model):
-         #user = models.OneToOneField(User)
-         user = models.OneToOneField(User, on_delete=models.CASCADE)
+         user = models.OneToOneField(User,related_name="user_profile", on_delete=models.CASCADE)
          description = models.CharField(max_length=150, default='')
          city = models.CharField(max_length=100, default='')
          phoneNumber = models.IntegerField(default=0)

@@ -5,15 +5,12 @@ from django.forms import ModelForm
 
 from accounts.models import UserProfile
 
-class EditProfileForm(ModelForm):
-         class Meta:
-            model = User
-            fields = (
-                     'email',
-                     'first_name',
-                     'last_name'
-                    )
-class ProfileForm(ModelForm):
-         class Meta:
-             model = UserProfile
-             fields = ('city', 'description', 'phoneNumber', 'image') #Note that we didn't mention user field here.
+class UserForm(UserCreationForm):
+    class Meta():
+        model = User
+        fields = ('username','password1', 'password2','email')
+
+class UserProfileInfoForm(forms.ModelForm):
+     class Meta():
+         model = UserProfile
+         fields = ('image','description', 'city')
