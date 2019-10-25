@@ -26,6 +26,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <a href="{% url 'view_profile' %}"><p>{{user.username}}{{user.user_profile.pk}}</p></a>
+                <a href="{% url 'change-password'%}">Change Password</a>
                 <li><img src="{{ user.user_profile.image.url}}" width="50" height="50"></li>
                 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 

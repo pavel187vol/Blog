@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
+from skitt.models import Post
 
 @login_required
 def special(request):
@@ -80,18 +81,9 @@ def edit_profile(request):
         args['form'] = form
         return render(request, 'accounts/edit_profile.html', args)
 
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.authon = request.user
-            post.save()
-            return redirect('post_details', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'skitt/post_new.html', {'form': form})
+
+def profile_author(request, pk):
+        pass
 
 def view_profile(request):
     profiles = UserProfile.objects.all()

@@ -9,6 +9,8 @@
   <body>
 
     {% block content %}
+    
+    <i><a href="{% url 'details_profile' pk=post.pk%}">{{user.user_profile.pk}}</a></i>
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
     <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
     {% if post.published_date %}
