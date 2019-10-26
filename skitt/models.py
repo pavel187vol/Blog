@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # class Profile(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,11 +25,20 @@ class Comment(models.Model):
 class Post(models.Model):
     authon = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='posts', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=250, unique_for_date='created_date')
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     moderatin = models.BooleanField(default=False)
     published_date = models.DateTimeField(blank=True, null=True)
     cover = models.ImageField(upload_to='images/', blank=True)
+
+
+    def get_absolute_url(self):
+        return reverse('post_details',
+                        args=[self.created_date.year,
+                              self.created_date.strftime('%m'),
+                              self.created_date.strftime('%d'),
+                              self.slug])
 
     def publish(self):
         self.published_date = timezone.now()

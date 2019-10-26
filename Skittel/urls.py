@@ -21,10 +21,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('skitt.urls')),
+    url(r'^', include('skitt.urls')),
     url(r'^accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    # url(r'^logout/$', views.user_logout, name='logout'),
 ]
 
 

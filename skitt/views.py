@@ -6,7 +6,7 @@ from accounts.models import UserProfile
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
-
+from django.urls import reverse
 
 def validate_text(request):
     text = request.GET.get('text', None)
@@ -33,9 +33,12 @@ def post_drafts_list(request):
     posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
     return render(request, 'skitt/post_drafts_list.html',{'posts': posts})
 
-def post_details(request, pk):
+def post_details(request, year, month, day, post):
     users = UserProfile.objects.all()
-    post = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Post, slug=post,
+                                   created_date__year=year,
+                                   created_date__month=month,
+                                   created_date__day=day)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-
+from django.urls import reverse
 # Create your models here.
 
 class UserProfileManager(models.Manager):
@@ -13,6 +13,10 @@ class UserProfile(models.Model):
          city = models.CharField(max_length=100, default='')
          phoneNumber = models.IntegerField(default=0)
          image = models.ImageField(upload_to='images/', blank=True)
+
+         def get_absolute_url(self):
+             return reverse('details_profile',
+                            args=[self.user.username])
 
 
          def __str__(self):
