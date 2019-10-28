@@ -13,9 +13,16 @@
     <a href="{% url 'post_drafts_list'%}">Drafts</a>
     <div>
       <h1><a href="/">Django Girls Blog</a></h1>
-    </div>
-
+    </div><p class="tags">
     {% for post in posts %}
+    Tags:
+    {% for tag in post.tags.all %}
+    <a href="{% url 'post_list_by_tag' tag.slug %}">
+      {{ tag.name }}
+    </a>
+    {% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </p>
     <div>
         <p>published: {{ post.published_date }}</p>
         <h1><a href="{{ post.get_absolute_url}}">{{ post.title }}</a></h1>

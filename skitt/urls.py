@@ -4,6 +4,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
+    path('tag/<tag_slug>/', views.post_list, name='post_list_by_tag'),
     path('post/<year>/<id>/<slug>/', views.post_details, name='post_details'),
     path('post/new/', views.post_new, name='post_new'),
     path('post/edit/<int:pk>/', views.post_edit, name='post_edit'),

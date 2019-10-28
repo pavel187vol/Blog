@@ -16,8 +16,11 @@ def validate_text(request):
     }
     return JsonResponse(data)
 # Create your views here.
-def post_list(request):
+def post_list(request, tag_slug=None):
     posts = Post.objects.filter(moderatin=True).order_by('created_date')
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
     return render(request, 'skitt/post_list.html', {'posts': posts})
 
 def post_publish(request, pk):
