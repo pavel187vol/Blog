@@ -3,10 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     ava = models.ImageField(upload_to='images/', blank=True)
+from taggit.managers import TaggableManager
 
 class Comment(models.Model):
     post = models.ForeignKey('skitt.Post', on_delete=models.CASCADE, related_name='comment')
@@ -22,8 +19,12 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
+
+
+
 class Post(models.Model):
     authon = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='posts', on_delete=models.CASCADE)
+    tags = TaggableManager()
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique_for_date='created_date')
     text = models.TextField()

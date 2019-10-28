@@ -24,6 +24,7 @@
     {% if post.cover %}
     <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
     {% endif%}
+    <a href="#">{{post.tag.all|join:', '}}</a>
     <hr>
     {% for comment in post.comment.all %}
       {% if user.is_authenticated or comment.approved_comment%}

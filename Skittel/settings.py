@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'skitt',
     'accounts.apps.AccountsConfig',
+    'taggit',
+    
 ]
 
 MIDDLEWARE = [
