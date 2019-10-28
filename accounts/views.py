@@ -96,7 +96,7 @@ def post_details(request, year, month, day, post):
                                    created_date__month=month,
                                    created_date__day=day)
 
-# def details_profile(request, username):
-#     user = request.user
-#     profile = get_object_or_404(UserProfile, user.username=username  )
-#     return render(request, 'accounts/details_profile.html', {'profile': profile, 'user': user})
+def details_profile(request, description):
+    user = request.user
+    profile = get_object_or_404(UserProfile, description=description)
+    return render(request, 'accounts/details_profile.html', {'profile': profile, 'user': user})

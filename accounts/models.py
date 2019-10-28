@@ -15,8 +15,7 @@ class UserProfile(models.Model):
          image = models.ImageField(upload_to='images/', blank=True)
 
          def get_absolute_url(self):
-             return reverse('details_profile',
-                            args=[self.user.username])
+             return reverse('details_profile', args=[str(self.description)])
 
 
          def __str__(self):
