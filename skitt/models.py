@@ -36,12 +36,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post_details',
                         args=[self.created_date.year,
-                              self.created_date.strftime('%m'),
-                              self.created_date.strftime('%d'),
+                              self.id,
                               self.slug])
 
     def publish(self):
         self.published_date = timezone.now()
+        self.moderatin = True
         self.save()
 
 

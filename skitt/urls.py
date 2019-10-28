@@ -4,10 +4,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/'\
-        r'(?P<post>[-\w]+)/$',
-        views.post_details,
-        name='post_details'),
+    path('post/<year>/<id>/<slug>/', views.post_details, name='post_details'),
     path('post/new/', views.post_new, name='post_new'),
     path('post/edit/<int:pk>/', views.post_edit, name='post_edit'),
     path('drafts/', views.post_drafts_list, name='post_drafts_list'),

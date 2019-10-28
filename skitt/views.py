@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 def validate_text(request):
     text = request.GET.get('text', None)
@@ -16,29 +17,28 @@ def validate_text(request):
     return JsonResponse(data)
 # Create your views here.
 def post_list(request):
-    posts = Post.objects.filter(published_date__isnull=False).order_by('created_date')
+    posts = Post.objects.filter(moderatin=True).order_by('created_date')
     return render(request, 'skitt/post_list.html', {'posts': posts})
 
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
-    return redirect('post_detail', pk=pk)
+    return render(request, 'skitt/post_publish.html')
 
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list')
 
+
 def post_drafts_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date')
+    posts = Post.objects.filter(moderatin=False).order_by('created_date')
     return render(request, 'skitt/post_drafts_list.html',{'posts': posts})
 
-def post_details(request, year, month, day, post):
-    users = UserProfile.objects.all()
-    post = get_object_or_404(Post, slug=post,
-                                   created_date__year=year,
-                                   created_date__month=month,
-                                   created_date__day=day)
+def post_details(request, year, slug, id):
+    post = get_object_or_404(Post, created_date__year=year, id=id, slug=slug)
+    user_i = User.objects.get(username=post.authon)
+    user = user_i.user_profile
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -49,7 +49,8 @@ def post_details(request, year, month, day, post):
             return redirect('post_details', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'skitt/post_details.html',{'post': post,'form': form})
+    return render(request, 'skitt/post_details.html',{'post': post,'form': form, 'user':user})
+
 
 @login_required
 def post_new(request):
@@ -59,7 +60,7 @@ def post_new(request):
             post = form.save(commit=False)
             post.authon = request.user
             post.save()
-            return redirect('post_details', pk=post.pk)
+            return redirect('post_list')
     else:
         form = PostForm()
     return render(request, 'skitt/post_new.html', {'form':form})
@@ -77,19 +78,6 @@ def post_edit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'skitt/post_new.html', {'form': form})
 
-# def add_comment_to_post(request, pk):
-#     post = get_object_or_404(Post, pk=pk)
-#     if request.method == "POST":
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             comment.post = post
-#             comment.author = request.user
-#             comment.save()
-#             return redirect('post_details', pk=post.pk)
-#     else:
-#         form = CommentForm()
-#     return render(request, 'skitt/add_comment_to_post.html', {'form': form})
 
 def comment_remove(request,pk):
     comment = get_object_or_404(Comment, pk=pk)

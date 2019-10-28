@@ -1,17 +1,17 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.contrib.auth import views as auth_views
 
 # SET THE NAMESPACE!
 add_name = 'Skittel'
+app_name = 'accounts'
 # Be careful setting the name to just /login use userlogin instead!
 urlpatterns=[
     url(r'^register/$',views.register,name='register'),
-    url(r'^user_login/$',views.user_login,name='user_login'),   
+    url(r'^user_login/$',views.user_login,name='user_login'),
     url(r'^view_profile/$', views.view_profile, name ='view_profile'),
-    path('details/<description>/', views.details_profile, name ='details_profile'),
-
+    path('details/<username>/', views.details_profile, name ='details_profile'),
     url(r'^view_profile/edit_profile/<int:pk>/$', views.edit_profile, name ='edit_profile'),
     path('change/password/',auth_views.PasswordChangeView.as_view(template_name='registration/change-password.html'), name='change-password'),
     path('change/password/done/',auth_views.PasswordChangeDoneView.as_view(template_name='registration/done-chane-password.html'), name='change-password-done'),

@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from skitt.models import Post
+from django.contrib.auth.models import User
+
 
 @login_required
 def special(request):
@@ -89,14 +91,9 @@ def view_profile(request):
     profiles = UserProfile.objects.all()
     return render(request, 'accounts/view_profile.html', {'profiles': profiles})
 
-def post_details(request, year, month, day, post):
-    users = UserProfile.objects.all()
-    post = get_object_or_404(Post, slug=post,
-                                   created_date__year=year,
-                                   created_date__month=month,
-                                   created_date__day=day)
 
-def details_profile(request, description):
+def details_profile(request, username):
     user = request.user
-    profile = get_object_or_404(UserProfile, description=description)
-    return render(request, 'accounts/details_profile.html', {'profile': profile, 'user': user})
+    obj = get_object_or_404(User, username=user.username)
+    profile = obj.user_profile
+    return render(request, 'accounts/details_profile.html', {'profile': profile})
