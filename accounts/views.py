@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from .forms import UserForm,UserProfileInfoForm
+from .forms import UserForm,UserProfileInfoForm,LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -8,18 +8,31 @@ from .models import UserProfile
 from skitt.models import Post
 from django.contrib.auth.models import User
 
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user and user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/skitt/post_list.html/', {'username': username, })
+            else:
+                form.add_error(None, 'Unknown or disabled account')
+                return render(request, 'registration/login.html', {'form': form})
+        else:
+            return render(request, 'registration/login.html', {'form': form})
+    else:
+        return render(request, 'registration/login.html', {'form': LoginForm()})
 
-@login_required
-def special(request):
-    return HttpResponse("You are logged in !")
-
-
+# выход с аккаунта
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('post_list'))
 
-
+# регистрация
 def register(request):
     registered = False
     if request.method == 'POST':
@@ -46,24 +59,6 @@ def register(request):
                            'profile_form':profile_form,
                            'registered':registered})
 
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request,user)
-                return HttpResponseRedirect(reverse('post_list'))
-            else:
-                return HttpResponse("Your account was inactive.")
-        else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username,password))
-            return HttpResponse("Invalid login details given")
-    else:
-        return render(request, 'registration/login.html', {})
 
 
 @login_required

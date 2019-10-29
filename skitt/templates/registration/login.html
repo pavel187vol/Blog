@@ -1,18 +1,30 @@
+{% extends "base.html" %}
+
 {% block content %}
-  <div class="container">
-    <div class="jumbotron">
-      <h1>Login here :</h1>
-<form method="post" action="{% url 'user_login' %}">
-          {% csrf_token %}
-          {# A more "HTML" way of creating the login form#}
-          <label for="username">Username:</label>
-          <input type="text" name="username" placeholder="Username">
-          <label for="password">Password:</label>
-          <input type="password" name="password" placeholder="Password">
-          <input type="submit" name="" value="Login">
+
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+
+{% for error in form.non_field_errors %}
+    <span class="error-message">{{ error }}</span>
+{% endfor %}
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="button">Войти</button>
 </form>
-<p><a href="{% url 'change-password-form' %}">Forgotten your password?</a></p>
-<a href="{% url 'register' %}">Sign up</a>
-</div>
-  </div>
+
+{# Assumes you setup the password_reset view in your URLconf #}
+<p><a href="{% url 'accounts:change-password-form' %}">Lost password?</a></p>
+
 {% endblock %}

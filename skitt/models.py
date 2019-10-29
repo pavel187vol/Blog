@@ -1,13 +1,12 @@
 from django.db import models
-from django.conf import settings
 from django.utils import timezone
-from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from accounts.models import UserProfile
 
 class Comment(models.Model):
     post = models.ForeignKey('skitt.Post', on_delete=models.CASCADE, related_name='comment')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='comment')
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
@@ -23,13 +22,13 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    authon = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='posts', on_delete=models.CASCADE)
+    authon = models.ForeignKey(UserProfile,related_name='posts', on_delete=models.CASCADE)
     tags = TaggableManager()
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique_for_date='created_date')
     text = models.TextField()
+    published = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
-    moderatin = models.BooleanField(default=False)
     published_date = models.DateTimeField(blank=True, null=True)
     cover = models.ImageField(upload_to='images/', blank=True)
 

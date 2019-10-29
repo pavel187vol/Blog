@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include('skitt.urls')),
     url(r'^accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 

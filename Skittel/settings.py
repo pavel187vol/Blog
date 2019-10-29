@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'skitt',
     'accounts.apps.AccountsConfig',
     'taggit',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'Skittel.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_test',
+        'NAME': 'data_base',
         'USER' : 'rood187',
         'PASSWORD' : 'zhelezo187',
         'HOST' : '127.0.0.1',
