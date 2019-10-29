@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from .forms import UserForm,UserProfileInfoForm,LoginForm
+from .forms import UserForm,UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -7,26 +7,17 @@ from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from skitt.models import Post
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
 
-def user_login(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(username=username, password=password)
-            if user and user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('/skitt/post_list.html/', {'username': username, })
-            else:
-                form.add_error(None, 'Unknown or disabled account')
-                return render(request, 'registration/login.html', {'form': form})
-        else:
-            return render(request, 'registration/login.html', {'form': form})
-    else:
-        return render(request, 'registration/login.html', {'form': LoginForm()})
 
-# выход с аккаунта
+class SignUp(generic.CreateView):
+    form_class = UserForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/registration.html'
+
+# выход
 @login_required
 def user_logout(request):
     logout(request)
@@ -60,7 +51,7 @@ def register(request):
                            'registered':registered})
 
 
-
+# редактирование профиля
 @login_required
 def edit_profile(request):
     user_profile = get_object_or_404(UserProfile)
@@ -79,14 +70,12 @@ def edit_profile(request):
         return render(request, 'accounts/edit_profile.html', args)
 
 
-def profile_author(request, pk):
-        pass
-
+# просмотр всех профилей
 def view_profile(request):
     profiles = UserProfile.objects.all()
     return render(request, 'accounts/view_profile.html', {'profiles': profiles})
 
-
+# просмотр профиля, со всей информацией о нём
 def details_profile(request, username):
     user = request.user
     obj = get_object_or_404(User, username=user.username)

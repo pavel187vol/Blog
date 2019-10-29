@@ -25,6 +25,7 @@
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'accounts:change-password-form' %}">Lost password?</a></p>
+<p><a href="{% url 'account:change-password-form' %}">Lost password?</a></p>
+<p><a href="{% url 'account:register'%}">Sign uo</a></p>
 
 {% endblock %}

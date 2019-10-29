@@ -25,8 +25,8 @@
                 <li><a href="{% url 'post_list' %}">Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <a href="{% url 'accounts:view_profile' %}"><p>{{user.username}}{{user.user_profile.pk}}</p></a>
-                <a href="{% url 'accounts:change-password'%}">Change Password</a>
+                <a href="{% url 'account:view_profile' %}"><p>{{user.username}}{{user.user_profile.pk}}</p></a>
+                <a href="{% url 'account:change-password'%}">Change Password</a>
                 <li><img src="{{ user.user_profile.image.url}}" width="50" height="50"></li>
                 <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 
@@ -45,7 +45,7 @@
                 <li><a href="{%url 'post_new'%}">New</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url 'accounts:login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
         </div>
     </nav>
