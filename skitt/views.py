@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.db.models import Count
+from datetime import datetime, timedelta
+
 
 def validate_text(request):
     text = request.GET.get('text', None)
@@ -42,6 +45,9 @@ def post_details(request, year, slug, id):
     post = get_object_or_404(Post, created_date__year=year, id=id, slug=slug)
     user_i = User.objects.get(username=post.authon)
     user = user_i.user_profile
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.objects.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags')[:4]
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -52,7 +58,7 @@ def post_details(request, year, slug, id):
             return redirect('post_details', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'skitt/post_details.html',{'post': post,'form': form, 'user':user})
+    return render(request, 'skitt/post_details.html',{'post': post,'form': form, 'user':user, 'similar_posts': similar_posts})
 
 
 @login_required
@@ -91,3 +97,16 @@ def comment_approve(request,pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_details', pk=comment.post.pk)
+
+
+def post_filter(request, pk):
+    posts = Post.objects.filter(moderatin=True).order_by('created_date')
+    if pk == 1:
+        now = datetime.now() - timedelta(minutes=60*24*7)
+        posts = posts.filter(created_date__gte=now)
+    elif pk == 2:
+        now = datetime.now() - timedelta(minutes=60*24*30)
+        posts = posts.filter(created_date__gte=now)
+    elif pk == 3:
+        posts = posts
+    return render(request, 'skitt/post_list.html', {'posts': posts})

@@ -8,6 +8,9 @@
   </head>
   <body>
     {% block content %}
+    <a href="{% url 'post_filter' pk=1%}"><button>Неделя</button></a>
+    <a href="{% url 'post_filter' pk=2%}"><button>Месяц</button></a>
+    <a href="{% url 'post_filter' pk=3%}"><button>Все</button></a>
     <a href="{% url 'post_new' %}">New</a>
     <hr>
     <a href="{% url 'post_drafts_list'%}">Drafts</a>

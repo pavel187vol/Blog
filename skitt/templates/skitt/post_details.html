@@ -26,6 +26,19 @@
     {% endif%}
     <a href="#">{{post.tags.all|join:', '}}</a>
     <hr>
+    <hr>
+    <hr>
+    <h2>Similar posts</h2>
+    {% for post in similar_posts %}
+        <p>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </p>
+    {% empty %}
+        There are no similar posts yet.
+    {% endfor %}
+    <hr>
+    <hr>
+    <hr>
     {% for comment in post.comment.all %}
       {% if user.is_authenticated or comment.approved_comment%}
         {% if not comment.approved_comment %}
