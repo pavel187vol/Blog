@@ -8,7 +8,7 @@ add_name = 'Skittel'
 app_name = 'account'
 # Be careful setting the name to just /login use userlogin instead!
 urlpatterns=[
-    url(r'^register/$',views.SignUp.as_view(),name='register'),
+    url(r'^register/$',views.register,name='register'),
     url(r'^view_profile/$', views.view_profile, name ='view_profile'),
     path('details/<username>/', views.details_profile, name ='details_profile'),
     url(r'^view_profile/edit_profile/<int:pk>/$', views.edit_profile, name ='edit_profile'),

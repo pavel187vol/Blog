@@ -1,4 +1,4 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
 from .forms import UserForm,UserProfileInfoForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -12,10 +12,6 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 
-class SignUp(generic.CreateView):
-    form_class = UserForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/registration.html'
 
 # выход
 @login_required
@@ -35,11 +31,9 @@ def register(request):
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
-            if 'image' in request.FILES:
-                print('found it')
-                profile.image = request.FILES['image']
             profile.save()
             registered = True
+            return redirect('login')
         else:
             print(user_form.errors,profile_form.errors)
     else:
