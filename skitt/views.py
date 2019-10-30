@@ -22,7 +22,7 @@ def validate_text(request):
 # черновик: туда попадают все только что созданные посты
 # т.к. к published по умолчанию присваивается значение False
 def post_drafts_list(request):
-        posts = Post.objects.filter(moderatin=False).order_by('created_date')
+        posts = Post.objects.filter(published=False).order_by('created_date')
         return render(request, 'skitt/post_drafts_list.html',{'posts': posts})
 
 def post_list(request, tag_slug=None):
@@ -78,10 +78,11 @@ def post_details(request, year, slug, id):
 # создание поста, только для авторизовавшихся пользователей
 def post_new(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.authon = request.user
+            post.cover = form.cleaned_data['cover']
             post.save()
             return redirect('post_list')
     else:
@@ -116,7 +117,7 @@ def comment_approve(request,pk):
 
 # фильтрация постов по времени
 def post_filter(request, pk):
-    posts = Post.objects.filter(moderatin=True).order_by('created_date')
+    posts = Post.objects.filter(published=True).order_by('created_date')
 # за последнюю неделю
     if pk == 1:
         now = datetime.now() - timedelta(minutes=60*24*7)

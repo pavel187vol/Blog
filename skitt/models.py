@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from accounts.models import UserProfile
+from django.contrib.auth.models import User
 
 class Comment(models.Model):
     post = models.ForeignKey('skitt.Post', on_delete=models.CASCADE, related_name='comment')
@@ -22,7 +23,7 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    authon = models.ForeignKey(UserProfile,related_name='posts', on_delete=models.CASCADE)
+    authon = models.ForeignKey(User,related_name='posts', on_delete=models.CASCADE)
     tags = TaggableManager()
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=250, unique_for_date='created_date')
@@ -30,7 +31,7 @@ class Post(models.Model):
     published = models.BooleanField(default=False)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
-    cover = models.ImageField(upload_to='images/', blank=True)
+    cover = models.ImageField(upload_to='post/', blank=True)
 
 
     def get_absolute_url(self):

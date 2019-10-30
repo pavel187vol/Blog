@@ -11,7 +11,7 @@
     {% block content %}
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
     <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
-    <a href="{% url 'accounts:details_profile' username=post.authon %}">{{post.authon}}</a>
+    <a href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
     {% if post.moderatin != False %}
     <div class="date">
       {{ post.published_date }}

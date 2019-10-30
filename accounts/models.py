@@ -12,7 +12,7 @@ class UserProfile(models.Model):
          description = models.CharField(max_length=150, default='')
          city = models.CharField(max_length=100, default='')
          phoneNumber = models.IntegerField(default=0)
-         image = models.ImageField(upload_to='images/', blank=True)
+         image = models.ImageField(upload_to='profile/', blank=True)
 
          def get_absolute_url(self):
              return reverse('details_profile', args=[str(self.user.username)])

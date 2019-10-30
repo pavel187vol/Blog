@@ -23,14 +23,13 @@ def user_logout(request):
 def register(request):
     registered = False
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileInfoForm(data=request.POST)
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileInfoForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            user.set_password(user.password)
-            user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.image = profile_form.cleaned_data['image']
             profile.save()
             registered = True
             return redirect('login')
