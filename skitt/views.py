@@ -42,14 +42,17 @@ def post_publish(request, pk):
 # удаление поста
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
+    if request.user.username == post.authon:
+        post.delete()
+    else:
+        return redirect('post_list')
     return redirect('post_list')
 
 # просмотр поста
 @login_required
-def post_details(request, year, slug, id):
+def post_details(request, slug, id):
     # каноническая ссылка поста состоит из его даты(года,месяца,дня,ид и слага)
-    post = get_object_or_404(Post, created_date__year=year, id=id, slug=slug)
+    post = get_object_or_404(Post,id=id, slug=slug)
     # получаем пользователя, который написал пост
     user_stock = User.objects.get(username=post.authon)
     # получаем профиль, для вызова метода get_absolute_url, который написал пост
@@ -69,7 +72,7 @@ def post_details(request, year, slug, id):
             comment.post = post
             comment.author = request.user
             comment.save()
-            return redirect('post_details', pk=post.pk)
+            return redirect('post_details', id=post.id, slug=post.slug)
     else:
         form = CommentForm()
     return render(request, 'skitt/post_details.html',{'post': post,'form': form, 'user':user, 'similar_posts': similar_posts})
@@ -110,9 +113,9 @@ def post_edit(request, pk):
 # удаление комментария
 def comment_remove(request,pk):
     comment = get_object_or_404(Comment, pk=pk)
+    post = Post.objects.get(comment=comment)
     comment.delete()
-    return redirect('post_details', pk=comment.post.pk)
-
+    return redirect('post_details', slug=post.slug, id=post.id)
 
 def comment_approve(request,pk):
     comment = get_object_or_404(Comment, pk=pk)

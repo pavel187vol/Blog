@@ -9,6 +9,7 @@
   <body>
 
     {% block content %}
+    {{request.user.username}}
     <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
     <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
     <a href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
@@ -40,17 +41,15 @@
     <hr>
     <hr>
     {% for comment in post.comment.all %}
-      {% if user.is_authenticated or comment.approved_comment%}
-        {% if not comment.approved_comment %}
+      {% if user%}
           <a href="{% url 'comment_remove' pk=comment.pk%}">Remove</a>
           <a href="{% url 'comment_approve' pk=comment.pk%}">Approve</a>
-        {% endif %}
         <p>{{comment.text}}</p>
       {%endif%}
     {% empty %}
       <p>No comments here yer!</p>
     {% endfor%}
-    {% if user.is_authenticated %}
+    {% if user %}
     <form class="form-comment" method="POST">{%csrf_token%}
       {{form.as_p}}
       <button type="submit" name="button">Done</button>
