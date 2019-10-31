@@ -1,12 +1,5 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
     {% block content %}
     <a href="{% url 'post_filter' pk=1%}"><button>Неделя</button></a>
     <a href="{% url 'post_filter' pk=2%}"><button>Месяц</button></a>
@@ -33,5 +26,3 @@
     </div>
 {% endfor %}
 {% endblock %}
-  </body>
-</html>

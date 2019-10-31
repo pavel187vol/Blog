@@ -1,15 +1,7 @@
 {% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
 
     {% block content %}
-    {{request.user.username}}
     <a href="{% url 'post_edit' slug=post.slug id=post.id%}">Edit</a>
     <a href="{% url 'post_remove' slug=post.slug id=post.id%}">Delete</a>
     <a href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
@@ -59,4 +51,3 @@
     <a href="{% url 'login'%}">Login</a>
     {% endif %}
     {% endblock %}
-</html>
