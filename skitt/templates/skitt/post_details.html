@@ -10,8 +10,8 @@
 
     {% block content %}
     {{request.user.username}}
-    <a href="{% url 'post_edit' pk=post.pk%}">Edit</a>
-    <a href="{% url 'post_remove' pk=post.pk%}">Delete</a>
+    <a href="{% url 'post_edit' slug=post.slug id=post.id%}">Edit</a>
+    <a href="{% url 'post_remove' slug=post.slug id=post.id%}">Delete</a>
     <a href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
     {% if post.moderatin != False %}
     <div class="date">

@@ -40,13 +40,13 @@ def post_publish(request, pk):
     return render(request, 'skitt/post_publish.html')
 
 # удаление поста
-def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.user.username == post.authon:
+def post_remove(request, slug, id):
+    post = get_object_or_404(Post, id=id, slug=slug)
+    if request.user == post.authon:
         post.delete()
     else:
         return redirect('post_list')
-    return redirect('post_list')
+    return render(request, 'skitt/remove.html' )
 
 # просмотр поста
 @login_required
@@ -94,16 +94,16 @@ def post_new(request):
     return render(request, 'skitt/post_new.html', {'form':form})
 
 # редоктирования поста
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def post_edit(request, slug, id):
+    post = get_object_or_404(Post, id=id, slug=slug)
     # форма выдаётся только в том случае, если пользователь является автором поста
-    if request.user.username == post.authon:
+    if request.user == post.authon:
         if request.method == "POST":
             form = PostForm(request.POST, instance=post)
             if form.is_valid():
                 post = form.save(commit=False)
                 post.save()
-                return redirect('post_details', pk=post.pk)
+                return redirect('post_details', id=post.id, slug=post.slug)
         else:
             form = PostForm(instance=post)
     else:
