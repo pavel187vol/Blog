@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles%}
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -40,12 +40,13 @@
     <hr>
     <hr>
     <hr>
+    {{request.user}}
+    <br>
     {% for comment in post.comment.all %}
-      {% if user%}
+      {% if comment.author == request.user or post.authon == request.user%}
           <a href="{% url 'comment_remove' pk=comment.pk%}">Remove</a>
-          <a href="{% url 'comment_approve' pk=comment.pk%}">Approve</a>
-        <p>{{comment.text}}</p>
       {%endif%}
+      <i>{{comment.author}}</i> <p>{{comment.text}}</p>
     {% empty %}
       <p>No comments here yer!</p>
     {% endfor%}

@@ -114,8 +114,11 @@ def post_edit(request, pk):
 def comment_remove(request,pk):
     comment = get_object_or_404(Comment, pk=pk)
     post = Post.objects.get(comment=comment)
-    comment.delete()
-    return redirect('post_details', slug=post.slug, id=post.id)
+    if comment.author == request.user or comment.author == post.authon:
+        comment.delete()
+        return redirect('post_details', slug=post.slug, id=post.id)
+    else:
+        return redirect('post_details', slug=post.slug, id=post.id)
 
 def comment_approve(request,pk):
     comment = get_object_or_404(Comment, pk=pk)
