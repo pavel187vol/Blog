@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
-
+from .forms import UserEditForm
 
 
 # выход
@@ -49,21 +49,28 @@ def register(request):
 # редактирование профиля
 @login_required
 def edit_profile(request):
-    user_profile = get_object_or_404(UserProfile)
-    if request.method == 'POST':
-        form = UserProfileInfoForm(request.POST, instance=request.user)
-
-        if form.is_valid():
-            user_profile = form.save()
-            user_profile.save()
-            return redirect('accounts:view_profile')
+    user = request.user
+    user_profile_form = UserProfile.objects.get(user=request.user)
+    if request.user == user_profile_form.user:
+        if request.method == 'POST':
+            form = UserProfileInfoForm(request.POST, instance=request.user)
+            form_user = UserEditForm(request.POST, instance=request.user)
+            if form.is_valid() and form_user.is_valid():
+                user.username = form_user.save()
+                user.save()
+                user_profile = form.save()
+                user_profile.save()
+                return redirect('accounts:view_profile')
+        else:
+            form_user = UserEditForm(instance=user)
+            form = UserProfileInfoForm(instance=user_profile_form)
+            args = {}
+            args['form_user'] = form_user
+            # args.update(csrf(request))
+            args['form'] = form
+            return render(request, 'accounts/edit_profile.html', args)
     else:
-        form = UserProfileInfoForm(instance=user_profile)
-        args = {}
-        # args.update(csrf(request))
-        args['form'] = form
-        return render(request, 'accounts/edit_profile.html', args)
-
+        return redirect('my_profile')
 
 # просмотр всех профилей
 def view_profile(request):
@@ -76,3 +83,9 @@ def details_profile(request, username):
     obj = get_object_or_404(User, username=user.username)
     profile = obj.user_profile
     return render(request, 'accounts/details_profile.html', {'profile': profile})
+
+def my_profile(request, username):
+    user = request.user
+    obj = get_object_or_404(User, username=user.username)
+    profile = obj.user_profile
+    return render(request, 'accounts/my_profile.html', {'profile':profile})

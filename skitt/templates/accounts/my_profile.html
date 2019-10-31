@@ -8,6 +8,8 @@
 {% for post in profile.user.posts.all%}
 {{post.title}}
 {% endfor%}
+<a href="{% url 'account:edit_profile'%}">Edit Profile</a>
+
 <br>
 <p>{{profile.city}}</p>
 {% endblock %}

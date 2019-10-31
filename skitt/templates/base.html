@@ -25,7 +25,8 @@
                 <li><a href="{% url 'post_list' %}">Blog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <a href="{% url 'account:view_profile' %}"><p>{{user.username}}{{user.user_profile.pk}}</p></a>
+                <a href="{% url 'account:view_profile'%}">All profile</a>
+                <a href="{% url 'account:my_profile' username=request.user.username %}"><p>My Profile</p></a>
                 <a href="{% url 'account:change-password'%}">Change Password</a>
                 {% if user.user_profile.image %}
                 <li><img src="{{ user.user_profile.image.url}}" width="50" height="50"></li>

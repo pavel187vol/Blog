@@ -46,6 +46,7 @@ def post_remove(request, pk):
     return redirect('post_list')
 
 # просмотр поста
+@login_required
 def post_details(request, year, slug, id):
     # каноническая ссылка поста состоит из его даты(года,месяца,дня,ид и слага)
     post = get_object_or_404(Post, created_date__year=year, id=id, slug=slug)
@@ -92,15 +93,18 @@ def post_new(request):
 # редоктирования поста
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.authon = request.user
-            post.save()
-            return redirect('post_details', pk=post.pk)
+    # форма выдаётся только в том случае, если пользователь является автором поста
+    if request.user.username == post.authon:
+        if request.method == "POST":
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.save()
+                return redirect('post_details', pk=post.pk)
+        else:
+            form = PostForm(instance=post)
     else:
-        form = PostForm(instance=post)
+        return redirect('post_list')
     return render(request, 'skitt/post_new.html', {'form': form})
 
 # удаление комментария

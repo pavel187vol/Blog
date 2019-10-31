@@ -6,9 +6,9 @@
 
 {% block content %}
 {% for profile in profiles %}
-  <a href="{{profile.get_absolute_url}}">{{profile.user.username}}</a>
+<a href="{% url 'account:details_profile' username=profile.user.username %}">{{profile.user.username}}</a>
+
   <hr>
 {% endfor %}
-<a href="{% url 'edit_profile'%}">Edit Profile</a>
 
 {% endblock %}

@@ -14,3 +14,10 @@ class UserProfileInfoForm(forms.ModelForm):
      class Meta():
          model = UserProfile
          fields = ('image','description', 'city')
+
+class UserEditForm(forms.ModelForm):
+    username = forms.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('username',)
