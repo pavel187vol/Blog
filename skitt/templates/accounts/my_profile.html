@@ -9,7 +9,7 @@
 {{post.title}}
 {% endfor%}
 <a href="{% url 'account:edit_profile'%}">Edit Profile</a>
-
+<a href="{% url 'account:remove_profile' username=profile.user.username %}">Remove Profile</a>
 <br>
 <p>{{profile.city}}</p>
 {% endblock %}

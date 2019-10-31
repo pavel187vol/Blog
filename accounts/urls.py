@@ -12,6 +12,7 @@ urlpatterns=[
     url(r'^view_profile/$', views.view_profile, name ='view_profile'),
     path('details/<username>/', views.details_profile, name ='details_profile'),
     path('<username>/', views.my_profile, name ='my_profile'),
+    path('remove/<username>/', views.remove_profile, name ='remove_profile'),
     url(r'^view_profile/edit_profile/<int:pk>/$', views.edit_profile, name ='edit_profile'),
     path('change/password/',auth_views.PasswordChangeView.as_view(template_name='registration/change-password.html'), name='change-password'),
     path('change/password/done/',auth_views.PasswordChangeDoneView.as_view(template_name='registration/done-chane-password.html'), name='change-password-done'),

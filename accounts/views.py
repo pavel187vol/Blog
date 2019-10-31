@@ -60,7 +60,7 @@ def edit_profile(request):
                 user.save()
                 user_profile = form.save()
                 user_profile.save()
-                return redirect('accounts:view_profile')
+                return redirect('account:view_profile')
         else:
             form_user = UserEditForm(instance=user)
             form = UserProfileInfoForm(instance=user_profile_form)
@@ -84,8 +84,18 @@ def details_profile(request, username):
     profile = obj.user_profile
     return render(request, 'accounts/details_profile.html', {'profile': profile})
 
+# метод был добавлен в связи с тем, что для безопасности ссылок, лучше вынести их в отдельный шаблон
 def my_profile(request, username):
     user = request.user
     obj = get_object_or_404(User, username=user.username)
     profile = obj.user_profile
     return render(request, 'accounts/my_profile.html', {'profile':profile})
+
+# удаление профиля и пользователя
+def remove_profile(request, username):
+    user = request.user
+    obj = get_object_or_404(User, username=user.username)
+    profile = obj.user_profile
+    profile.delete()
+    user.delete()
+    return redirect('login')
