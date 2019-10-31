@@ -24,11 +24,13 @@ def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
+        # request.FILES для добавления фотографии
         profile_form = UserProfileInfoForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            # добавление фотографии
             profile.image = profile_form.cleaned_data['image']
             profile.save()
             registered = True
