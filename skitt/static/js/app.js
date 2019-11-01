@@ -1,3 +1,3 @@
-$(function () {
-    console.log("Hello!");
-});
+$(document).ready(function(){
+ $('.header').height($(window).height());
+})

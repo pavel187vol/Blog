@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
-
-
+{% load static%}
     {% block content %}
-    <a href="{% url 'post_edit' slug=post.slug id=post.id%}">Edit</a>
-    <a href="{% url 'post_remove' slug=post.slug id=post.id%}">Delete</a>
-    <a href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
-    {% if post.moderatin != False %}
-    <div class="date">
-      {{ post.published_date }}
-      {% else %}
-      <a href="{% url 'post_publish' pk=post.pk %}">Publish</a>
-    </div>
-    {% endif %}
-    <h1>{{post.title}}</h1>
-    <p class="her">{{post.text}}</p>
-    {% if post.cover %}
-    <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
-    {% endif%}
+    <div class="description">
+      <a class="btn btn-outline-info btn-lg" href="{% url 'post_edit' slug=post.slug id=post.id%}">Edit</a>
+      <a class="btn btn-outline-info btn-lg" href="{% url 'post_remove' slug=post.slug id=post.id%}">Delete</a>
+      <a class="btn btn-outline-danger btn-lg" href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
+      {% if post.moderatin != False %}
+        {{ post.published_date }}
+        {% else %}
+        <a class="btn btn-outline-info btn-lg" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+      {% endif %}
+      <h1>{{post.title}}</h1>
+      <p class="her">{{post.text}}</p>
+      <p>Aaa</p>
+      {% if post.cover %}
+      <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
+      {% endif%}
+
     <a href="#">{{post.tags.all|join:', '}}</a>
     <hr>
     <hr>
@@ -50,4 +50,5 @@
     {% else %}
     <a href="{% url 'login'%}">Login</a>
     {% endif %}
+    </div>
     {% endblock %}
