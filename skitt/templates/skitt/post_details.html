@@ -6,9 +6,9 @@
       <a class="btn btn-outline-info btn-lg" href="{% url 'post_remove' slug=post.slug id=post.id%}">Delete</a>
       <a class="btn btn-outline-danger btn-lg" href="{% url 'account:details_profile' username=post.authon %}">{{post.authon}}</a>
       {% if post.moderatin != False %}
-        {{ post.published_date }}
-        {% else %}
         <a class="btn btn-outline-info btn-lg" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+        {% else %}
+        {{ post.published_date }}
       {% endif %}
       <h1>{{post.title}}</h1>
       <p class="her">{{post.text}}</p>

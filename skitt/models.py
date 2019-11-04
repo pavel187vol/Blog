@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class Comment(models.Model):
     post = models.ForeignKey('skitt.Post', on_delete=models.CASCADE, related_name='comment')
@@ -10,6 +11,7 @@ class Comment(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
+    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
 
     def approve(self):
         self.approved_comment = True

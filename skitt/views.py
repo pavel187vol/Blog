@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment
 from django.utils import timezone
 from .forms import PostForm, CommentForm
-from accounts.models import UserProfile
+from account.models import Profile
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -22,7 +22,8 @@ def validate_text(request):
 # черновик: туда попадают все только что созданные посты
 # т.к. к published по умолчанию присваивается значение False
 def post_drafts_list(request):
-        posts = Post.objects.filter(published=False).order_by('created_date')
+        posts_i = Post.objects.filter(published=False).order_by('created_date')
+        posts = posts_i.filter(authon=request.user)
         return render(request, 'skitt/post_drafts_list.html',{'posts': posts})
 
 def post_list(request, tag_slug=None):
