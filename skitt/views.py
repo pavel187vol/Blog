@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment
 from django.utils import timezone
@@ -12,12 +14,6 @@ from django.db.models import Count
 from datetime import datetime, timedelta
 
 
-def validate_text(request):
-    text = request.GET.get('text', None)
-    data = {
-        'is_taken': Comment.objects.all()
-    }
-    return JsonResponse(data)
 
 # черновик: туда попадают все только что созданные посты
 # т.к. к published по умолчанию присваивается значение False
@@ -141,3 +137,21 @@ def post_filter(request, pk):
     elif pk == 3:
         posts = posts
     return render(request, 'skitt/post_list.html', {'posts': posts})
+
+
+@login_required
+@require_POST
+def post_like(request):
+    post_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if post_id and action:
+        try:
+            post = Post.objects.get(id=post_id)
+            if action == 'like':
+                post.users_like.add(request.user)
+            else:
+                post.users_like.remove(request.user)
+            return JsonResponse({'status':'ok'})
+        except:
+            pass
+    return JsonResponse({'status':'ko'})
