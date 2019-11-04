@@ -8,11 +8,16 @@
       {% if post.moderatin != False %}
         <a class="btn btn-outline-info btn-lg" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
         {% else %}
+
         {{ post.published_date }}
       {% endif %}
       <h1>{{post.title}}</h1>
       <p class="her">{{post.text}}</p>
       <p>Aaa</p>
+      {% with total_likes=post.users_like.count %}
+                {{ total_likes }} like{{ total_likes|pluralize }}
+      {% endwith %}
+
       {% if post.cover %}
       <img src="{{ post.cover.url}}" alt="{{ post.title }}" width="500", height="500"><br>
       {% endif%}

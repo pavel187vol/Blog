@@ -1,3 +1,4 @@
+from django.utils.text import slugify
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -11,7 +12,7 @@ class Comment(models.Model):
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
-    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
+
 
     def approve(self):
         self.approved_comment = True
@@ -33,7 +34,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
     cover = models.ImageField(upload_to='post/', blank=True)
-
+    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='images_liked', blank=True)
 
     def get_absolute_url(self):
         return reverse('post_details',
@@ -48,3 +49,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Post, self).save(*args, **kwargs)
