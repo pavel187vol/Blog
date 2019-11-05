@@ -62,9 +62,9 @@
       <p>No comments here yer!</p>
     {% endfor%}
     {% if user %}
-    <form class="form-comment" method="POST">{%csrf_token%}
+    <form class="form-comment" method="POST" >{%csrf_token%}
       {{form.as_p}}
-      <button type="submit" name="button">Done</button>
+      <button type="submit" data-id="{{post.id}}" class='comment' name="button">Done</button>
     </form>
     {% else %}
     <a href="{% url 'login'%}">Login</a>
@@ -99,4 +99,5 @@
           }
         );
       });
+
     {% endblock %}

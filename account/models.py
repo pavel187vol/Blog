@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, related_name='user_profile', on_delete=models.CASCADE)
     date_of_birth = models.DateField(blank=True, null=True)
     photo = models.ImageField(upload_to='profile/%Y/%m/%d/', blank=True)
+    users_following = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='profile_following', blank=True)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)

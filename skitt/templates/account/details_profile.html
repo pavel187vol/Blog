@@ -11,6 +11,24 @@
  </div>
  <div class="col-lg-8 col-md-8 col-sm-12 desc">
 
+ {% with total_following=profile.users_following.count users_following=profile.users_following.all %}
+ <div class="post-info">
+   <div>
+     <span class="count">
+       <span class="total">{{ total_following }}</span>
+       Followers{{ total_following|pluralize }}
+     </span>
+     <br>
+     {% if request.user in users_following %}
+       <a href="#" data-id="{{ profile.id }}" data-action="unlike"
+         class="like button">Unlike</a>
+       {% else %}
+       <a href="#" data-id="{{ profile.id }}" data-action="like"
+         class="like button">Like</a>
+       {% endif %}
+ </div>
+ </div>
+ {% endwith %}
  <h3>D.John</h3>
  <p>
     ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -22,4 +40,34 @@
   </p>
   </div>
 </div>
+{% endblock %}
+{% block domready %}
+  $('a.like').click(function(e){
+    e.preventDefault();
+    $.profile('{% url "account:following" %}',
+      {
+        id: $(this).data('id'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('a.like').data('action');
+
+          // toggle data-action
+          $('a.like').data('action', previous_action == 'like' ?
+          'unlike' : 'like');
+          // toggle link text
+          $('a.like').text(previous_action == 'like' ? 'Unlike' :
+          'Like');
+
+          // update total likes
+          var previous_likes = parseInt($('span.count .total').text());
+          $('span.count .total').text(previous_action == 'like' ?
+          previous_likes + 1 : previous_likes - 1);
+        }
+      }
+    );
+  });
+  
 {% endblock %}

@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
@@ -80,3 +82,20 @@ def remove_profile(request, username):
     profile.delete()
     user.delete()
     return redirect('login')
+
+@login_required
+@require_POST
+def user_following(request):
+    profile_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if profile_id and action:
+        try:
+            Profile = Profile.objects.get(id=profile_id)
+            if action == 'Подписаться':
+                Profile.users_following.add(request.user)
+            else:
+                Profile.users_following.remove(request.user)
+            return JsonResponse({'status':'ok'})
+        except:
+            pass
+    return JsonResponse({'status':'ko'})

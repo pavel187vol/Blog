@@ -14,7 +14,12 @@ from django.db.models import Count
 from datetime import datetime, timedelta
 
 
-
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(data)
 # черновик: туда попадают все только что созданные посты
 # т.к. к published по умолчанию присваивается значение False
 def post_drafts_list(request):
@@ -46,7 +51,6 @@ def post_remove(request, slug, id):
     return render(request, 'skitt/remove.html' )
 
 # просмотр поста
-@login_required
 def post_details(request, slug, id):
     # каноническая ссылка поста состоит из его даты(года,месяца,дня,ид и слага)
     post = get_object_or_404(Post,id=id, slug=slug)
