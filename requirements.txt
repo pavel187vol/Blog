@@ -69,7 +69,6 @@ SQLAlchemy==1.1.11
 sqlparse==0.3.0
 sshtunnel==0.1.4
 systemd-python==234
-unattended-upgrades==0.1
 urllib3==1.25.6
 usb-creator==0.3.3
 virtualenv==15.1.0
