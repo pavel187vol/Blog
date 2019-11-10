@@ -68,7 +68,6 @@ South==1.0.2
 SQLAlchemy==1.1.11
 sqlparse==0.3.0
 sshtunnel==0.1.4
-system-service==0.3
 systemd-python==234
 ubuntu-drivers-common==0.0.0
 ufw==0.36
